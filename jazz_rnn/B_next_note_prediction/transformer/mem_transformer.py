@@ -616,7 +616,7 @@ class MemTransformerLM(nn.Module):
 
         # eos has no chord, so we need to mask it out
         eos_mask = eos_mask.view(-1)
-        eos_mask = 1 - eos_mask
+        eos_mask = torch.logical_not(eos_mask) # 1 - eos_mask
         chord_pitches = chord_pitches.view(-1, 13)
         chord_pitch_idxs_no_eos = chord_pitches.nonzero()[:, 1] + OFFSET_TO_5OCT
         chord_pitch_idxs = torch.zeros(shape[0] * shape[1], 4, device=chord_pitches.device, dtype=chord_pitches.dtype)
