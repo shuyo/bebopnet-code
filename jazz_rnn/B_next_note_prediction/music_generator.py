@@ -380,9 +380,9 @@ class MusicGenerator:
                                        chord_pitches, chord_idx.unsqueeze(1)),
                                       dim=1)
         # update last note only where measure is not done and finished handling residuals
-        update_last_note_batch_mask = (measure_not_done * (1 - residual_exists_mask.byte()))
+        update_last_note_batch_mask = torch.logical_and(measure_not_done, torch.logical_not(residual_exists_mask))
         update_last_note_mask = update_last_note_batch_mask.unsqueeze(-1).expand(self.batch_size,
-                                                                                 NOTE_VECTOR_SIZE).byte()
+                                                                                 NOTE_VECTOR_SIZE)
         last_note_net = torch.where(update_last_note_mask, new_notes_for_net,
                                     last_note_net[0]).unsqueeze(0)
         measure_idx_tensor = torch.as_tensor(measure_idx,

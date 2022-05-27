@@ -542,10 +542,10 @@ class MemTransformerLM(nn.Module):
         mlen = mems[0].size(0) if mems is not None else 0
         klen = mlen + qlen
         dec_attn_mask = torch.triu(
-            word_emb.new_ones(qlen, klen), diagonal=1 + mlen).byte()[:, :, None]
+            word_emb.new_ones(qlen, klen, dtype=torch.bool), diagonal=1 + mlen)[:, :, None]
         dec_attn_mask = dec_attn_mask.unsqueeze(-1).expand(qlen, klen, bsz, 1)
         for b, seq_idx in ios_mask:
-            dec_attn_mask[seq_idx:, :seq_idx, b, :] = 1
+            dec_attn_mask[seq_idx:, :seq_idx, b, :] = True
 
         pos_seq = torch.arange(klen - 1, -1, -1.0, device=word_emb.device, dtype=word_emb.dtype)
         if self.clamp_len > 0:
