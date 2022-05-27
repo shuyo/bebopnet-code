@@ -105,6 +105,8 @@ def train(args):
     train_set, val_set, converter = create_music_corpus(pkl_path=args.data_pkl, sequence_len=args.bptt,
                                                         cuda=(not args.no_cuda), all=args.all,
                                                         batch_size=args.batch_size)
+    if train_set.get_num_batches()<=0:
+        raise Exception('Batch size must be reduced.')
     os.system('cp ' + os.path.join(args.data_pkl, '*.pkl') + ' ' + save_path)
 
     ###############################################################################
