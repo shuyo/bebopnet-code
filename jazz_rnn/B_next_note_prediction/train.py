@@ -107,6 +107,8 @@ def train(args):
                                                         batch_size=args.batch_size)
     if train_set.get_num_batches()<=0:
         raise Exception('Batch size must be reduced.')
+    if val_set.get_num_batches()<=0:
+        val_set.batch_size = val_set.get_num_sequences()
     os.system('cp ' + os.path.join(args.data_pkl, '*.pkl') + ' ' + save_path)
 
     ###############################################################################
@@ -152,7 +154,7 @@ def train(args):
     def evaluate(val_set):
         losses = AverageMeter()
         meters_avg = {k: AverageMeter() for k in meters_list}
-        val_batch_size = args.batch_size
+        val_batch_size = val_set.batch_size
 
         # Turn on evaluation mode which disables dropout
         model.eval()
