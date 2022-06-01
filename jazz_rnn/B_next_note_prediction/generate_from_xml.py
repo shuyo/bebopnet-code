@@ -257,7 +257,7 @@ def create_midi(args, music_stream_out):
 def create_mp3(args):
     # generate mp3 midi
     os.system(
-        ('timidity --preserve-silence {0}.mid -Ow -o -' + args.verbose_ext + ' | lame - -b 64 -h {0}_initial.mp3 >/dev/null 2>&1').format(
+        ('timidity {0}.mid -Ow -o -' + args.verbose_ext + ' | lame - -b 64 -h {0}_initial.mp3 >/dev/null 2>&1').format(
             args.outf))
 
     if args.back_track.split('/')[-1] in pop_bt2silence.keys():
